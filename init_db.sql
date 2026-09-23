@@ -1,0 +1,40 @@
+CREATE DATABASE IF NOT EXISTS face_attendance;
+USE face_attendance;
+
+-- students table
+CREATE TABLE IF NOT EXISTS students (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  roll_no VARCHAR(50) NOT NULL UNIQUE,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  section VARCHAR(50) NULL,
+  subjects TEXT NULL,
+  image VARCHAR(255) NULL,
+  face_encoding BLOB NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- teachers table
+CREATE TABLE IF NOT EXISTS teachers (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  subject VARCHAR(100) NULL,
+  phone VARCHAR(20) NULL,
+  department VARCHAR(100) NULL,
+  qualification VARCHAR(255) NULL,
+  image VARCHAR(255) NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- attendance table
+CREATE TABLE IF NOT EXISTS attendance (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  student_id INT NOT NULL,
+  date DATE NOT NULL,
+  time TIME NOT NULL,
+  status VARCHAR(10) NOT NULL DEFAULT 'Present',
+  FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE 
+);

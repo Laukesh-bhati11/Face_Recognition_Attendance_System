@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faculty Dashboard - VeriFace AI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+  <!-- Top App Navigation -->
+  <header class="app-navbar">
+    <div class="nav-container">
+      <a href="{{ url_for('home') }}" class="app-brand">
+        <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="brand-text">
+          <span class="brand-title">VeriFace<span class="text-blue">AI</span></span>
+          <span class="brand-badge teacher-badge">Faculty Portal</span>
+        </div>
+      </a>
+
+      <div class="nav-user-controls">
+        <div class="user-pill">
+          <div class="avatar-circle teacher-avatar">
+            <i class="fa-solid fa-chalkboard-user"></i>
+          </div>
+          <div class="user-info">
+            <span class="user-name">{{ name }}</span>
+            <span class="user-role">Faculty Administrator</span>
+          </div>
+        </div>
+        <a href="{{ url_for('logout') }}" class="btn-logout" title="Sign Out">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Dashboard Container -->
+  <main class="dashboard-main">
+    <div class="dashboard-wrapper">
+      
+      <!-- Welcome Header -->
+      <div class="dashboard-header">
+        <div class="header-left">
+          <span class="welcome-tag faculty-tag">Faculty Administration Center</span>
+          <h1 class="welcome-title">Welcome, Professor <span class="highlight-name">{{ name }}</span></h1>
+          <p class="welcome-subtitle">Manage student registrations, review real-time biometric attendance audit logs, and export institutional reports.</p>
+        </div>
+        <div class="header-right">
+          <div class="quick-status-card teacher-status">
+            <div class="pulse-dot"></div>
+            <div class="status-details">
+              <span class="status-title">Biometric Model</span>
+              <span class="status-value">Dlib 128-D Active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-messages">
+            {% for category, msg in messages %}
+              <div class="alert alert-{{ category }}">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>{{ msg }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <!-- Overview KPI Cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon icon-blue"><i class="fa-solid fa-users-gear"></i></div>
+          <div class="kpi-info">
+            <span class="kpi-label">Class Management</span>
+            <span class="kpi-value">Multi-Section Active</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon icon-emerald"><i class="fa-solid fa-clipboard-list"></i></div>
+          <div class="kpi-info">
+            <span class="kpi-label">Attendance Logs</span>
+            <span class="kpi-value">Auto Timestamps</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon icon-cyan"><i class="fa-solid fa-file-csv"></i></div>
+          <div class="kpi-info">
+            <span class="kpi-label">Reporting</span>
+            <span class="kpi-value">CSV Export Ready</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Primary Action Cards Grid -->
+      <div class="action-grid teacher-grid">
+        <!-- Action: Student Directory -->
+        <a href="{{ url_for('view_students') }}" class="action-card">
+          <div class="action-icon-circle action-students">
+            <i class="fa-solid fa-users"></i>
+          </div>
+          <div class="action-content">
+            <div class="action-badge-pill">Directory</div>
+            <h3>Student Directory</h3>
+            <p>Browse the roster of registered students, search by roll number or name, and inspect section assignments.</p>
+          </div>
+          <div class="action-arrow">
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </a>
+
+        <!-- Action: Register New Student -->
+        <a href="{{ url_for('add_student') }}" class="action-card">
+          <div class="action-icon-circle action-add-student">
+            <i class="fa-solid fa-user-plus"></i>
+          </div>
+          <div class="action-content">
+            <div class="action-badge-pill">Enrollment</div>
+            <h3>Register New Student</h3>
+            <p>Enroll a new student profile with automated 128-D facial vector encoding and instant database storage.</p>
+          </div>
+          <div class="action-arrow">
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </a>
+
+        <!-- Action: Manage Attendance Records -->
+        <a href="{{ url_for('manage_attendance') }}" class="action-card hero-action-card">
+          <div class="action-glow"></div>
+          <div class="action-icon-circle action-manage-att">
+            <i class="fa-solid fa-table-list"></i>
+          </div>
+          <div class="action-content">
+            <div class="action-badge-pill">Live Logs</div>
+            <h3>Manage Attendance</h3>
+            <p>Inspect master attendance logs across all classes, filter in real time, and download CSV spreadsheets.</p>
+          </div>
+          <div class="action-arrow">
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </a>
+
+        <!-- Action: Faculty Profile -->
+        <a href="{{ url_for('teacher_profile') }}" class="action-card">
+          <div class="action-icon-circle action-teacher-prof">
+            <i class="fa-solid fa-id-card-clip"></i>
+          </div>
+          <div class="action-content">
+            <div class="action-badge-pill">Credentials</div>
+            <h3>Faculty Profile</h3>
+            <p>View your academic credentials, assigned department, subject specialization, and contact details.</p>
+          </div>
+          <div class="action-arrow">
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-inner">
+      <span>&copy; 2026 VeriFace AI Faculty Administration. All rights reserved.</span>
+      <span class="system-tag"><span class="pulse-dot"></span> System Operational</span>
+    </div>
+  </footer>
+</body>
+</html>

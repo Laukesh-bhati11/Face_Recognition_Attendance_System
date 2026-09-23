@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Student - Faculty Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/register_student.css') }}">
+</head>
+<body>
+  <!-- Header -->
+  <header class="app-navbar">
+    <div class="nav-container">
+      <a href="{{ url_for('teacher_dashboard') }}" class="app-brand">
+        <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="brand-text">
+          <span class="brand-title">VeriFace<span class="text-blue">AI</span></span>
+          <span class="brand-badge teacher-badge">Faculty Portal</span>
+        </div>
+      </a>
+      <a href="{{ url_for('teacher_dashboard') }}" class="btn-back-nav">
+        <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+      </a>
+    </div>
+  </header>
+
+  <main class="page-container">
+    <div class="form-card">
+      <div class="card-header">
+        <div class="header-icon"><i class="fa-solid fa-user-plus"></i></div>
+        <h2>Register New Student</h2>
+        <p>Enter the student's academic credentials and upload their facial portrait for automatic 128-D vector encoding.</p>
+      </div>
+
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-messages">
+            {% for category, msg in messages %}
+              <div class="alert alert-{{ category }}">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>{{ msg }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form method="POST" enctype="multipart/form-data" class="register-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name"><i class="fa-solid fa-user"></i> Student Full Name</label>
+            <input type="text" id="name" name="name" placeholder="e.g. Alex Johnson" required>
+          </div>
+
+          <div class="form-group">
+            <label for="roll_no"><i class="fa-solid fa-id-card"></i> Roll Number</label>
+            <input type="text" id="roll_no" name="roll_no" placeholder="e.g. 21CS089" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="section"><i class="fa-solid fa-layer-group"></i> Class Section</label>
+            <input type="text" id="section" name="section" placeholder="e.g. 3B" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email"><i class="fa-solid fa-envelope"></i> Student Email</label>
+            <input type="email" id="email" name="email" placeholder="alex.j@university.edu" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password"><i class="fa-solid fa-lock"></i> Student Password <span class="label-hint">(Defaults to Roll Number if left blank)</span></label>
+          <input type="password" id="password" name="password" placeholder="Leave blank to use Roll Number">
+        </div>
+
+        <!-- Face Image Upload with Live Preview -->
+        <div class="form-group">
+          <label><i class="fa-solid fa-camera"></i> Student Face Reference Portrait</label>
+          <div class="upload-dropzone" onclick="document.getElementById('image').click()">
+            <input type="file" id="image" name="image" accept="image/*" required onchange="previewStudentFace(this)">
+            <div class="dropzone-content" id="dropzone-content">
+              <div class="dropzone-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+              <div class="dropzone-text">
+                <span class="upload-title">Click or drag face photo here</span>
+                <span class="upload-hint">Upload a clear, front-facing portrait without masks or dark glasses</span>
+              </div>
+            </div>
+            <div class="image-preview-box" id="image-preview-box" style="display: none;">
+              <img id="face-preview-img" src="" alt="Face Preview">
+              <div class="preview-info">
+                <span class="preview-filename" id="preview-filename">image.jpg</span>
+                <span class="preview-status"><i class="fa-solid fa-circle-check"></i> Ready for vector encoding</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-block">
+            <i class="fa-solid fa-user-check"></i> Enroll Student in System
+          </button>
+          <a href="{{ url_for('teacher_dashboard') }}" class="btn btn-secondary btn-block">
+            Cancel
+          </a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    function previewStudentFace(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('face-preview-img').src = e.target.result;
+          document.getElementById('preview-filename').textContent = input.files[0].name;
+          document.getElementById('dropzone-content').style.display = 'none';
+          document.getElementById('image-preview-box').style.display = 'flex';
+        }
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+  </script>
+</body>
+</html>

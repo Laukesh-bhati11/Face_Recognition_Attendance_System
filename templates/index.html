@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VeriFace AI - Smart Face Recognition Attendance System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+<body>
+  <!-- Header / Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="{{ url_for('home') }}" class="brand-logo">
+        <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="brand-text">
+          <span class="brand-title">VeriFace<span class="text-blue">AI</span></span>
+          <span class="brand-sub">Attendance Intelligence</span>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#portals">Portals</a>
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="status-indicator">
+          <span class="pulse-dot"></span>
+          <span>Engine Online</span>
+        </div>
+        <a href="#portals" class="nav-btn">Access Portals</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Flash Messages -->
+  <div class="flash-wrapper">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, msg in messages %}
+            <div class="alert alert-{{ category }}">
+              <i class="fa-solid fa-circle-info"></i>
+              <span>{{ msg }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero-section" id="overview">
+    <div class="hero-content">
+      <div class="badge-pill">
+        <i class="fa-solid fa-microchip"></i>
+        <span>AI Biometric Verification Engine v2.4</span>
+      </div>
+
+      <h1 class="hero-title">
+        Touchless <span class="gradient-text">Face Recognition</span> &amp; Real-Time Attendance
+      </h1>
+
+      <p class="hero-subtitle">
+        Enterprise-grade biometric attendance management powered by high-accuracy facial vector embeddings, instant verification, and automated audit logging.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="{{ url_for('login') }}" class="btn btn-primary">
+          <i class="fa-solid fa-user-graduate"></i> Student Portal
+        </a>
+        <a href="{{ url_for('teacher_login') }}" class="btn btn-secondary">
+          <i class="fa-solid fa-chalkboard-user"></i> Faculty Portal
+        </a>
+      </div>
+
+      <!-- Trust & Key Metrics Strip -->
+      <div class="stats-strip">
+        <div class="stat-item">
+          <div class="stat-number">99.8%</div>
+          <div class="stat-label">Match Accuracy</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-number">&lt; 0.4s</div>
+          <div class="stat-label">Recognition Speed</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Touchless &amp; Secure</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-number">128-D</div>
+          <div class="stat-label">Neural Vector Hash</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dedicated Portals Section -->
+  <section class="portals-section" id="portals">
+    <div class="section-header">
+      <span class="section-tag">Role-Based Access</span>
+      <h2 class="section-title">Select Your Dedicated Portal</h2>
+      <p class="section-desc">Streamlined interfaces tailored specifically for students and faculty members.</p>
+    </div>
+
+    <div class="portals-grid">
+      <!-- Student Portal Card -->
+      <div class="portal-card student-card">
+        <div class="card-glow"></div>
+        <div class="portal-icon-wrapper student-icon">
+          <i class="fa-solid fa-user-graduate"></i>
+        </div>
+        <div class="portal-badge">Student Access</div>
+        <h3>Student Portal</h3>
+        <p>Verify your daily attendance with our fast facial scanner, track historical logs, and view your academic profile.</p>
+        
+        <ul class="portal-checklist">
+          <li><i class="fa-solid fa-circle-check"></i> Instant Webcam Face Verification</li>
+          <li><i class="fa-solid fa-circle-check"></i> Personal Attendance History &amp; Timestamps</li>
+          <li><i class="fa-solid fa-circle-check"></i> Student Profile &amp; Section Information</li>
+        </ul>
+
+        <div class="portal-btn-group">
+          <a href="{{ url_for('login') }}" class="btn btn-primary btn-block">
+            <i class="fa-solid fa-right-to-bracket"></i> Student Login
+          </a>
+          <a href="{{ url_for('signup') }}" class="btn btn-outline btn-block">
+            <i class="fa-solid fa-user-plus"></i> New Student Signup
+          </a>
+        </div>
+      </div>
+
+      <!-- Faculty / Teacher Portal Card -->
+      <div class="portal-card teacher-card">
+        <div class="card-glow"></div>
+        <div class="portal-icon-wrapper teacher-icon">
+          <i class="fa-solid fa-chalkboard-user"></i>
+        </div>
+        <div class="portal-badge faculty-badge">Faculty &amp; Admin</div>
+        <h3>Faculty Portal</h3>
+        <p>Monitor real-time class attendance logs, manage student enrollments, inspect facial vector records, and export reports.</p>
+
+        <ul class="portal-checklist">
+          <li><i class="fa-solid fa-circle-check"></i> Real-Time Class Attendance Audit Logs</li>
+          <li><i class="fa-solid fa-circle-check"></i> One-Click CSV Export for Spreadsheets</li>
+          <li><i class="fa-solid fa-circle-check"></i> Student Registration &amp; Facial Vector Encoding</li>
+        </ul>
+
+        <div class="portal-btn-group">
+          <a href="{{ url_for('teacher_login') }}" class="btn btn-primary btn-block">
+            <i class="fa-solid fa-right-to-bracket"></i> Faculty Login
+          </a>
+          <a href="{{ url_for('teacher_signup') }}" class="btn btn-outline btn-block">
+            <i class="fa-solid fa-address-card"></i> Faculty Registration
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Features Grid -->
+  <section class="features-section" id="features">
+    <div class="section-header">
+      <span class="section-tag">Enterprise Capabilities</span>
+      <h2 class="section-title">Built for Modern Educational Institutions</h2>
+      <p class="section-desc">Engineered for high accuracy, speed, zero-contact convenience, and compliance.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-brain"></i></div>
+        <h4>Deep Neural Embeddings</h4>
+        <p>Extracts 128-dimensional facial vectors for invariant recognition under varying lighting, angles, and expressions.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
+        <h4>Sub-Second Check-In</h4>
+        <p>Rapid frame-by-frame matching provides instant attendance confirmation with bounding box HUD verification.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-file-csv"></i></div>
+        <h4>One-Click CSV Export</h4>
+        <p>Download structured attendance spreadsheets for grading, compliance audits, and institutional reporting.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-fingerprint"></i></div>
+        <h4>Duplicate Prevention</h4>
+        <p>Intelligent single-entry-per-day logic blocks accidental double records while maintaining an immutable audit log.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-lock"></i></div>
+        <h4>Secure Vector Storage</h4>
+        <p>Facial embeddings are cryptographically stored as binary hashes rather than raw image files for maximum privacy.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+        <h4>Live Filter &amp; Search</h4>
+        <p>Instant client-side searching across student directories and attendance logs with zero page reloads.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Pipeline -->
+  <section class="workflow-section" id="how-it-works">
+    <div class="section-header">
+      <span class="section-tag">Architecture</span>
+      <h2 class="section-title">How VeriFace AI Works</h2>
+      <p class="section-desc">Four seamless steps from facial onboarding to automated administrative reporting.</p>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">01</div>
+        <h4>Face Onboarding</h4>
+        <p>Student registers credentials and uploads a reference portrait with instant live preview.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">02</div>
+        <h4>Vector Encoding</h4>
+        <p>The AI model computes a unique 128-dimensional biometric mathematical representation.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">03</div>
+        <h4>Webcam Verification</h4>
+        <p>Live camera stream compares face locations in real time using Euclidean vector distance.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">04</div>
+        <h4>Automated Logging</h4>
+        <p>Attendance is recorded with timestamp, date, and status directly in the database.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <span class="brand-title">VeriFace<span class="text-blue">AI</span></span>
+        <p class="footer-text">Next-Generation Biometric Attendance Management System.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#overview">Overview</a>
+        <a href="#portals">Portals</a>
+        <a href="#features">Features</a>
+        <a href="{{ url_for('login') }}">Student Portal</a>
+        <a href="{{ url_for('teacher_login') }}">Faculty Portal</a>
+      </div>
+      <div class="footer-copy">
+        <p>&copy; 2026 VeriFace AI Systems. All rights reserved.</p>
+        <span class="system-status"><span class="pulse-dot"></span> System Operational</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

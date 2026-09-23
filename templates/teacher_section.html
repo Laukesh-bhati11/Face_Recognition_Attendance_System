@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faculty Section Control - VeriFace AI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/teacher_section.css') }}">
+</head>
+<body>
+  <!-- Header Navbar -->
+  <header class="app-navbar">
+    <div class="nav-container">
+      <a href="{{ url_for('teacher_dashboard') }}" class="app-brand">
+        <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="brand-text">
+          <span class="brand-title">VeriFace<span class="text-blue">AI</span></span>
+          <span class="brand-badge teacher-badge">Faculty Operations</span>
+        </div>
+      </a>
+      <a href="{{ url_for('teacher_dashboard') }}" class="btn-back-nav">
+        <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+      </a>
+    </div>
+  </header>
+
+  <main class="page-container">
+    <div class="control-card">
+      <div class="card-header">
+        <div class="header-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+        <h2>Faculty Management Operations</h2>
+        <p>Direct administrative shortcuts for managing student rosters and class biometric logs.</p>
+      </div>
+
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-messages">
+            {% for category, msg in messages %}
+              <div class="alert alert-{{ category }}">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>{{ msg }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <div class="control-links">
+        <a href="{{ url_for('view_students') }}" class="control-item">
+          <div class="item-icon icon-blue"><i class="fa-solid fa-users"></i></div>
+          <div class="item-content">
+            <h4>Student Directory</h4>
+            <p>View, search, and verify all enrolled students across sections.</p>
+          </div>
+          <i class="fa-solid fa-chevron-right item-arrow"></i>
+        </a>
+
+        <a href="{{ url_for('manage_attendance') }}" class="control-item">
+          <div class="item-icon icon-emerald"><i class="fa-solid fa-clipboard-list"></i></div>
+          <div class="item-content">
+            <h4>Master Attendance Logs</h4>
+            <p>Inspect real-time logs, filter by section, and export CSV spreadsheets.</p>
+          </div>
+          <i class="fa-solid fa-chevron-right item-arrow"></i>
+        </a>
+
+        <a href="{{ url_for('add_student') }}" class="control-item">
+          <div class="item-icon icon-cyan"><i class="fa-solid fa-user-plus"></i></div>
+          <div class="item-content">
+            <h4>Enroll New Student</h4>
+            <p>Register new student profile with photo and instant 128-D vector encoding.</p>
+          </div>
+          <i class="fa-solid fa-chevron-right item-arrow"></i>
+        </a>
+      </div>
+
+      <div class="card-footer-nav">
+        <a href="{{ url_for('teacher_dashboard') }}" class="back-link">
+          <i class="fa-solid fa-arrow-left"></i> Return to Faculty Dashboard
+        </a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

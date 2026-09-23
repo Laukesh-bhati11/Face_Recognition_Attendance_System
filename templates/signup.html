@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Registration - VeriFace AI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+  <div class="auth-page">
+    <div class="auth-card register-auth-card">
+      
+      <!-- Left Showcase Panel -->
+      <div class="auth-showcase">
+        <a href="{{ url_for('home') }}" class="auth-brand">
+          <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <span class="brand-title">VeriFace<span class="text-blue">AI</span></span>
+        </a>
+
+        <div class="showcase-content">
+          <div class="showcase-badge">
+            <i class="fa-solid fa-user-plus"></i> Student Enrollment
+          </div>
+          <h2>Biometric Profile Registration</h2>
+          <p>Create your student identity and upload your reference face photograph. Our system automatically processes your 128-dimensional facial embedding for seamless daily touchless attendance.</p>
+
+          <div class="showcase-features">
+            <div class="feature-item">
+              <i class="fa-solid fa-camera-rotate"></i>
+              <span>High-resolution face vector encoding</span>
+            </div>
+            <div class="feature-item">
+              <i class="fa-solid fa-shield-check"></i>
+              <span>Cryptographically protected biometric hashes</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="showcase-footer">
+          <a href="{{ url_for('home') }}" class="back-link">
+            <i class="fa-solid fa-arrow-left"></i> Back to Homepage
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Form Panel -->
+      <div class="auth-form-panel">
+        <div class="form-header">
+          <h3>Create Student Account</h3>
+          <p>Fill in your details and upload a clear portrait photo.</p>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-messages">
+              {% for category, msg in messages %}
+                <div class="alert alert-{{ category }}">
+                  <i class="fa-solid fa-circle-info"></i>
+                  <span>{{ msg }}</span>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('signup') }}" enctype="multipart/form-data" class="auth-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name"><i class="fa-solid fa-user"></i> Full Name</label>
+              <div class="input-wrapper">
+                <input type="text" id="name" name="name" placeholder="John Doe" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="roll_no"><i class="fa-solid fa-id-card"></i> Roll Number</label>
+              <div class="input-wrapper">
+                <input type="text" id="roll_no" name="roll_no" placeholder="e.g. 21CS045" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email"><i class="fa-solid fa-envelope"></i> Email Address</label>
+              <div class="input-wrapper">
+                <input type="email" id="email" name="email" placeholder="john.doe@university.edu" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="password"><i class="fa-solid fa-lock"></i> Password</label>
+              <div class="input-wrapper">
+                <input type="password" id="password" name="password" placeholder="Create a password" required>
+                <button type="button" class="btn-toggle-password" onclick="togglePasswordVisibility('password', this)" title="Toggle visibility">
+                  <i class="fa-regular fa-eye"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Face Photo Upload & Live Preview -->
+          <div class="form-group">
+            <label><i class="fa-solid fa-camera"></i> Reference Facial Photograph</label>
+            <div class="upload-dropzone" onclick="document.getElementById('face_image').click()">
+              <input type="file" id="face_image" name="face_image" accept="image/*" required onchange="previewFacePhoto(this)">
+              <div class="dropzone-content" id="dropzone-content">
+                <div class="dropzone-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                <div class="dropzone-text">
+                  <span class="upload-title">Click to upload your portrait</span>
+                  <span class="upload-hint">PNG, JPG, JPEG (Ensure neutral face and clear lighting)</span>
+                </div>
+              </div>
+              <div class="image-preview-box" id="image-preview-box" style="display: none;">
+                <img id="face-preview-img" src="" alt="Face Preview">
+                <div class="preview-info">
+                  <span class="preview-filename" id="preview-filename">image.jpg</span>
+                  <span class="preview-status"><i class="fa-solid fa-circle-check"></i> Image selected</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            <i class="fa-solid fa-user-plus"></i> Complete Registration
+          </button>
+        </form>
+
+        <div class="form-footer">
+          <p>Already registered? <a href="{{ url_for('login') }}">Sign in here</a></p>
+          <div class="portal-switch">
+            <span>Faculty member?</span>
+            <a href="{{ url_for('teacher_signup') }}">Faculty Registration &rarr;</a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const icon = btn.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
+
+    function previewFacePhoto(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('face-preview-img').src = e.target.result;
+          document.getElementById('preview-filename').textContent = input.files[0].name;
+          document.getElementById('dropzone-content').style.display = 'none';
+          document.getElementById('image-preview-box').style.display = 'flex';
+        }
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+  </script>
+</body>
+</html>

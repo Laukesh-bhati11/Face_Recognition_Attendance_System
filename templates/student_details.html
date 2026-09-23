@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - VeriFace AI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/know_details.css') }}">
+</head>
+<body>
+  <!-- Header Navbar -->
+  <header class="app-navbar">
+    <div class="nav-container">
+      <a href="{{ url_for('student_dashboard') }}" class="app-brand">
+        <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="brand-text">
+          <span class="brand-title">VeriFace<span class="text-blue">AI</span></span>
+          <span class="brand-badge student-badge">Student Profile</span>
+        </div>
+      </a>
+      <a href="{{ url_for('student_dashboard') }}" class="btn-back-nav">
+        <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+      </a>
+    </div>
+  </header>
+
+  <main class="page-container">
+    <div class="profile-card">
+      
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-messages">
+            {% for category, msg in messages %}
+              <div class="alert alert-{{ category }}">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>{{ msg }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      {% if student %}
+        <!-- Profile Header -->
+        <div class="profile-hero">
+          <div class="profile-avatar">
+            <i class="fa-solid fa-user-graduate"></i>
+          </div>
+          <div class="profile-title-block">
+            <h2>{{ student.name }}</h2>
+            <div class="profile-badges">
+              <span class="badge-role">Enrolled Student</span>
+              <span class="badge-bio"><i class="fa-solid fa-shield-check"></i> Biometric Verified</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Details Grid -->
+        <div class="profile-details-grid">
+          <div class="detail-tile">
+            <div class="tile-icon"><i class="fa-solid fa-id-card"></i></div>
+            <div class="tile-content">
+              <span class="tile-label">Roll Number</span>
+              <span class="tile-value">{{ student.roll_no }}</span>
+            </div>
+          </div>
+
+          <div class="detail-tile">
+            <div class="tile-icon"><i class="fa-solid fa-envelope"></i></div>
+            <div class="tile-content">
+              <span class="tile-label">Email Address</span>
+              <span class="tile-value">{{ student.email }}</span>
+            </div>
+          </div>
+
+          <div class="detail-tile">
+            <div class="tile-icon"><i class="fa-solid fa-layer-group"></i></div>
+            <div class="tile-content">
+              <span class="tile-label">Class Section</span>
+              <span class="tile-value">{{ student.section or 'General' }}</span>
+            </div>
+          </div>
+
+          <div class="detail-tile">
+            <div class="tile-icon"><i class="fa-solid fa-book-bookmark"></i></div>
+            <div class="tile-content">
+              <span class="tile-label">Enrolled Subjects</span>
+              <span class="tile-value">{{ student.subjects or 'All Core Subjects' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Navigation Actions -->
+        <div class="profile-actions">
+          <a href="{{ url_for('mark_attendance') }}" class="btn btn-primary">
+            <i class="fa-solid fa-camera"></i> Mark Attendance
+          </a>
+          <a href="{{ url_for('show_attendance') }}" class="btn btn-secondary">
+            <i class="fa-solid fa-clock-rotate-left"></i> View Attendance Logs
+          </a>
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <div class="empty-icon"><i class="fa-solid fa-user-xmark"></i></div>
+          <h3>Profile Details Not Found</h3>
+          <p>Unable to retrieve profile information for this student session.</p>
+          <a href="{{ url_for('login') }}" class="btn btn-primary">Sign In Again</a>
+        </div>
+      {% endif %}
+
+      <div class="card-footer-nav">
+        <a href="{{ url_for('student_dashboard') }}" class="back-link">
+          <i class="fa-solid fa-arrow-left"></i> Return to Dashboard
+        </a>
+      </div>
+
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard - VeriFace AI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+  <!-- Top App Navigation -->
+  <header class="app-navbar">
+    <div class="nav-container">
+      <a href="{{ url_for('home') }}" class="app-brand">
+        <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="brand-text">
+          <span class="brand-title">VeriFace<span class="text-blue">AI</span></span>
+          <span class="brand-badge student-badge">Student Portal</span>
+        </div>
+      </a>
+
+      <div class="nav-user-controls">
+        <div class="user-pill">
+          <div class="avatar-circle">
+            <i class="fa-solid fa-user-graduate"></i>
+          </div>
+          <div class="user-info">
+            <span class="user-name">{{ name }}</span>
+            <span class="user-role">Enrolled Student</span>
+          </div>
+        </div>
+        <a href="{{ url_for('logout') }}" class="btn-logout" title="Sign Out">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Dashboard Container -->
+  <main class="dashboard-main">
+    <div class="dashboard-wrapper">
+      
+      <!-- Welcome Header -->
+      <div class="dashboard-header">
+        <div class="header-left">
+          <span class="welcome-tag">Student Command Center</span>
+          <h1 class="welcome-title">Welcome back, <span class="highlight-name">{{ name }}</span></h1>
+          <p class="welcome-subtitle">Your biometric profile is active. Use the quick actions below to mark or inspect attendance.</p>
+        </div>
+        <div class="header-right">
+          <div class="quick-status-card">
+            <div class="pulse-dot"></div>
+            <div class="status-details">
+              <span class="status-title">Biometric Status</span>
+              <span class="status-value">Face Vector Enrolled</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-messages">
+            {% for category, msg in messages %}
+              <div class="alert alert-{{ category }}">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>{{ msg }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <!-- Overview KPI Cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon icon-blue"><i class="fa-solid fa-id-badge"></i></div>
+          <div class="kpi-info">
+            <span class="kpi-label">Authentication</span>
+            <span class="kpi-value">Face AI 128-D</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon icon-emerald"><i class="fa-solid fa-calendar-check"></i></div>
+          <div class="kpi-info">
+            <span class="kpi-label">Attendance Policy</span>
+            <span class="kpi-value">Daily Single-Entry</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon icon-cyan"><i class="fa-solid fa-video"></i></div>
+          <div class="kpi-info">
+            <span class="kpi-label">Camera Scanner</span>
+            <span class="kpi-value">Ready &amp; Verified</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Primary Action Cards Grid -->
+      <div class="action-grid">
+        <!-- Hero Action: Mark Attendance -->
+        <a href="{{ url_for('mark_attendance') }}" class="action-card hero-action-card">
+          <div class="action-glow"></div>
+          <div class="action-icon-circle action-camera">
+            <i class="fa-solid fa-camera"></i>
+          </div>
+          <div class="action-content">
+            <div class="action-badge-pill">Daily Action</div>
+            <h3>Mark Attendance</h3>
+            <p>Activate your webcam to initiate instant biometric facial verification and record today's presence.</p>
+          </div>
+          <div class="action-arrow">
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </a>
+
+        <!-- Action: Show Attendance Records -->
+        <a href="{{ url_for('show_attendance') }}" class="action-card">
+          <div class="action-icon-circle action-history">
+            <i class="fa-solid fa-clipboard-check"></i>
+          </div>
+          <div class="action-content">
+            <h3>Attendance Records</h3>
+            <p>Access your complete historical attendance logs, check-in timestamps, and verified presence dates.</p>
+          </div>
+          <div class="action-arrow">
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </a>
+
+        <!-- Action: View My Profile Details -->
+        <a href="{{ url_for('my_details') }}" class="action-card">
+          <div class="action-icon-circle action-profile">
+            <i class="fa-solid fa-address-card"></i>
+          </div>
+          <div class="action-content">
+            <h3>Student Profile</h3>
+            <p>Review your academic profile, enrolled roll number, registered email, and assigned classroom section.</p>
+          </div>
+          <div class="action-arrow">
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </a>
+      </div>
+
+      <!-- Biometric Scanning Tips & Guidelines -->
+      <div class="guidelines-card">
+        <div class="guidelines-header">
+          <i class="fa-solid fa-lightbulb"></i>
+          <h4>Tips for Rapid Facial Verification</h4>
+        </div>
+        <div class="guidelines-list">
+          <div class="guideline-item">
+            <i class="fa-solid fa-sun"></i>
+            <span><strong>Lighting:</strong> Ensure your face is evenly illuminated with no strong backlights.</span>
+          </div>
+          <div class="guideline-item">
+            <i class="fa-solid fa-arrows-to-eye"></i>
+            <span><strong>Position:</strong> Look directly at the webcam at eye level, around 2 feet away.</span>
+          </div>
+          <div class="guideline-item">
+            <i class="fa-solid fa-glasses"></i>
+            <span><strong>Clarity:</strong> Remove dark sunglasses, face coverings, or heavy hats.</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-inner">
+      <span>&copy; 2026 VeriFace AI Attendance Management. All rights reserved.</span>
+      <span class="system-tag"><span class="pulse-dot"></span> System Operational</span>
+    </div>
+  </footer>
+</body>
+</html>

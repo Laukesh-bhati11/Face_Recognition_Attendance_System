@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biometric Verification - VeriFace AI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/mark_attendance.css') }}">
+</head>
+<body>
+  <!-- Header -->
+  <header class="app-navbar">
+    <div class="nav-container">
+      <a href="{{ url_for('student_dashboard') }}" class="app-brand">
+        <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="brand-text">
+          <span class="brand-title">VeriFace<span class="text-blue">AI</span></span>
+          <span class="brand-badge student-badge">Biometric Terminal</span>
+        </div>
+      </a>
+      <a href="{{ url_for('student_dashboard') }}" class="btn-back-nav">
+        <i class="fa-solid fa-arrow-left"></i> Dashboard
+      </a>
+    </div>
+  </header>
+
+  <main class="scanner-page">
+    <div class="scanner-card">
+      
+      <!-- Biometric Scanner HUD Animation -->
+      <div class="scanner-hud">
+        <div class="hud-circle-outer"></div>
+        <div class="hud-circle-inner"></div>
+        <div class="hud-laser-line"></div>
+        <div class="hud-corners">
+          <span class="corner top-left"></span>
+          <span class="corner top-right"></span>
+          <span class="corner bottom-left"></span>
+          <span class="corner bottom-right"></span>
+        </div>
+        <div class="hud-face-icon">
+          <i class="fa-solid fa-id-badge"></i>
+        </div>
+      </div>
+
+      <div class="scanner-header">
+        <h2>Facial Biometric Check-in</h2>
+        <p>Position your face towards the camera for automated neural vector matching and timestamp logging.</p>
+      </div>
+
+      <!-- Engine Status Badge -->
+      <div class="engine-status-strip">
+        <div class="engine-badge">
+          <span class="pulse-dot"></span>
+          <span>AI Biometric Engine: Ready</span>
+        </div>
+        <div class="engine-badge badge-blue">
+          <i class="fa-solid fa-video"></i>
+          <span>Webcam Sensor: Standby</span>
+        </div>
+      </div>
+
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-messages">
+            {% for category, msg in messages %}
+              <div class="alert alert-{{ category }}">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>{{ msg }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <!-- Verification Guidelines -->
+      <div class="scan-instructions">
+        <div class="instruction-item">
+          <div class="inst-num">1</div>
+          <span>Ensure adequate frontal lighting and remove face coverings or dark glasses.</span>
+        </div>
+        <div class="instruction-item">
+          <div class="inst-num">2</div>
+          <span>Center your face in the camera frame when the camera window launches.</span>
+        </div>
+        <div class="instruction-item">
+          <div class="inst-num">3</div>
+          <span>The system verifies your 128-D vector instantly and auto-closes upon completion.</span>
+        </div>
+      </div>
+
+      <!-- Action Form -->
+      <form method="POST" action="{{ url_for('mark_attendance') }}" class="scan-form" onsubmit="handleScanSubmit(this)">
+        <button type="submit" class="btn btn-primary btn-scanner" id="btn-scan">
+          <i class="fa-solid fa-camera"></i>
+          <span id="btn-text">Launch Camera &amp; Verify Identity</span>
+        </button>
+      </form>
+
+      <div class="card-footer-links">
+        <a href="{{ url_for('show_attendance') }}" class="footer-link">
+          <i class="fa-solid fa-calendar-days"></i> View My Attendance History
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    function handleScanSubmit(form) {
+      const btn = document.getElementById('btn-scan');
+      const text = document.getElementById('btn-text');
+      btn.disabled = true;
+      btn.style.opacity = '0.8';
+      text.textContent = 'Launching Camera Stream...';
+      form.submit();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faculty Login - VeriFace AI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+  <div class="auth-page">
+    <div class="auth-card">
+      
+      <!-- Left Showcase Panel -->
+      <div class="auth-showcase teacher-showcase">
+        <a href="{{ url_for('home') }}" class="auth-brand">
+          <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <span class="brand-title">VeriFace<span class="text-blue">AI</span></span>
+        </a>
+
+        <div class="showcase-content">
+          <div class="showcase-badge teacher-badge">
+            <i class="fa-solid fa-chalkboard-user"></i> Faculty Portal
+          </div>
+          <h2>Institutional Attendance Management</h2>
+          <p>Sign in to oversee class rosters, register student facial encodings, inspect real-time attendance sessions, and generate audit-ready CSV reports.</p>
+
+          <div class="showcase-features">
+            <div class="feature-item">
+              <i class="fa-solid fa-users-gear"></i>
+              <span>Student registration with 128-D vector generation</span>
+            </div>
+            <div class="feature-item">
+              <i class="fa-solid fa-file-csv"></i>
+              <span>One-click CSV attendance export for grading</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="showcase-footer">
+          <a href="{{ url_for('home') }}" class="back-link">
+            <i class="fa-solid fa-arrow-left"></i> Back to Homepage
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Form Panel -->
+      <div class="auth-form-panel">
+        <div class="form-header">
+          <h3>Faculty Login</h3>
+          <p>Enter your academic credentials to access the teacher portal.</p>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-messages">
+              {% for category, msg in messages %}
+                <div class="alert alert-{{ category }}">
+                  <i class="fa-solid fa-circle-info"></i>
+                  <span>{{ msg }}</span>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('teacher_login') }}" class="auth-form">
+          <div class="form-group">
+            <label for="email"><i class="fa-solid fa-envelope"></i> Faculty Email Address</label>
+            <div class="input-wrapper">
+              <input type="email" id="email" name="email" placeholder="faculty@university.edu" required autocomplete="email">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password"><i class="fa-solid fa-lock"></i> Password</label>
+            <div class="input-wrapper">
+              <input type="password" id="password" name="password" placeholder="Enter your password" required>
+              <button type="button" class="btn-toggle-password" onclick="togglePasswordVisibility('password', this)" title="Toggle password visibility">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            <i class="fa-solid fa-right-to-bracket"></i> Sign In to Faculty Portal
+          </button>
+        </form>
+
+        <div class="form-footer">
+          <p>Don't have a faculty account? <a href="{{ url_for('teacher_signup') }}">Register here</a></p>
+          <div class="portal-switch">
+            <span>Are you a student?</span>
+            <a href="{{ url_for('login') }}">Student Portal Login &rarr;</a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const icon = btn.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
+  </script>
+</body>
+</html>

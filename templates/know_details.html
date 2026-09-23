@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Directory - Faculty Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/know_details.css') }}">
+</head>
+<body>
+  <!-- Header Navbar -->
+  <header class="app-navbar">
+    <div class="nav-container">
+      <a href="{{ url_for('teacher_dashboard') }}" class="app-brand">
+        <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="brand-text">
+          <span class="brand-title">VeriFace<span class="text-blue">AI</span></span>
+          <span class="brand-badge teacher-badge">Faculty Directory</span>
+        </div>
+      </a>
+      <a href="{{ url_for('teacher_dashboard') }}" class="btn-back-nav">
+        <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+      </a>
+    </div>
+  </header>
+
+  <main class="page-container">
+    <div class="directory-card">
+      
+      <!-- Toolbar -->
+      <div class="card-toolbar">
+        <div class="toolbar-title">
+          <h2><i class="fa-solid fa-users"></i> Registered Student Directory</h2>
+          <p>Complete roster of students enrolled with 128-dimensional facial biometric profiles.</p>
+        </div>
+
+        <div class="toolbar-actions">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="directorySearch" placeholder="Search by name, roll no, section..." onkeyup="filterStudentDirectory()">
+          </div>
+
+          <button class="btn btn-export" onclick="exportDirectoryToCSV('student_directory.csv')">
+            <i class="fa-solid fa-file-arrow-down"></i> Export CSV
+          </button>
+
+          <a href="{{ url_for('add_student') }}" class="btn btn-primary">
+            <i class="fa-solid fa-user-plus"></i> Add Student
+          </a>
+        </div>
+      </div>
+
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-messages">
+            {% for category, msg in messages %}
+              <div class="alert alert-{{ category }}">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>{{ msg }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <!-- Students Table -->
+      {% if students and students|length > 0 %}
+        <div class="table-meta-bar">
+          <span class="record-counter" id="recordCounter">
+            Showing {{ students|length }} enrolled student{{ 's' if students|length > 1 else '' }}
+          </span>
+          <span class="status-indicator">
+            <span class="pulse-dot"></span> Face Vectors Active
+          </span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table" id="studentsTable">
+            <thead>
+              <tr>
+                <th><i class="fa-solid fa-hashtag"></i> ID</th>
+                <th><i class="fa-solid fa-user"></i> Student Name</th>
+                <th><i class="fa-solid fa-id-card"></i> Roll Number</th>
+                <th><i class="fa-solid fa-layer-group"></i> Section</th>
+                <th><i class="fa-solid fa-envelope"></i> Email Address</th>
+                <th><i class="fa-solid fa-book"></i> Subjects</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for s in students %}
+              <tr>
+                <td><span class="id-pill">#{{ s.id }}</span></td>
+                <td>
+                  <div class="student-profile-cell">
+                    <div class="avatar-circle-sm">
+                      <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+                    <span class="student-name">{{ s.name }}</span>
+                  </div>
+                </td>
+                <td><span class="roll-pill">{{ s.roll_no }}</span></td>
+                <td><span class="section-tag">{{ s.section or 'N/A' }}</span></td>
+                <td><span class="email-text">{{ s.email }}</span></td>
+                <td><span class="subject-text">{{ s.subjects or 'Enrolled' }}</span></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <div class="empty-icon"><i class="fa-solid fa-users-slash"></i></div>
+          <h3>No Registered Students Found</h3>
+          <p>Get started by adding your first student with their photo for automated facial recognition.</p>
+          <a href="{{ url_for('add_student') }}" class="btn btn-primary">
+            <i class="fa-solid fa-user-plus"></i> Register First Student
+          </a>
+        </div>
+      {% endif %}
+
+      <div class="card-footer-nav">
+        <a href="{{ url_for('teacher_dashboard') }}" class="back-link">
+          <i class="fa-solid fa-arrow-left"></i> Return to Faculty Dashboard
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    function filterStudentDirectory() {
+      const input = document.getElementById('directorySearch');
+      const filter = input.value.toLowerCase();
+      const table = document.getElementById('studentsTable');
+      if (!table) return;
+      const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+      let visibleCount = 0;
+
+      for (let i = 0; i < rows.length; i++) {
+        const text = rows[i].textContent || rows[i].innerText;
+        if (text.toLowerCase().indexOf(filter) > -1) {
+          rows[i].style.display = '';
+          visibleCount++;
+        } else {
+          rows[i].style.display = 'none';
+        }
+      }
+
+      const counter = document.getElementById('recordCounter');
+      if (counter) {
+        counter.textContent = `Showing ${visibleCount} enrolled student${visibleCount === 1 ? '' : 's'}`;
+      }
+    }
+
+    function exportDirectoryToCSV(filename) {
+      const table = document.getElementById('studentsTable');
+      if (!table) return;
+      let csv = [];
+      const rows = table.querySelectorAll('tr');
+
+      for (let i = 0; i < rows.length; i++) {
+        if (rows[i].style.display === 'none') continue;
+        let row = [], cols = rows[i].querySelectorAll('td, th');
+        for (let j = 0; j < cols.length; j++) {
+          let text = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').trim();
+          row.push('"' + text.replace(/"/g, '""') + '"');
+        }
+        csv.push(row.join(','));
+      }
+
+      const csvFile = new Blob([csv.join('\n')], { type: 'text/csv' });
+      const downloadLink = document.createElement('a');
+      downloadLink.download = filename;
+      downloadLink.href = window.URL.createObjectURL(csvFile);
+      downloadLink.style.display = 'none';
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    }
+  </script>
+</body>
+</html>

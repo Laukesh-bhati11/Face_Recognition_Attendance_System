@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faculty Profile - VeriFace AI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/know_details.css') }}">
+</head>
+<body>
+  <!-- Header Navbar -->
+  <header class="app-navbar">
+    <div class="nav-container">
+      <a href="{{ url_for('teacher_dashboard') }}" class="app-brand">
+        <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div class="brand-text">
+          <span class="brand-title">VeriFace<span class="text-blue">AI</span></span>
+          <span class="brand-badge teacher-badge">Faculty Profile</span>
+        </div>
+      </a>
+      <a href="{{ url_for('teacher_dashboard') }}" class="btn-back-nav">
+        <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+      </a>
+    </div>
+  </header>
+
+  <main class="page-container">
+    <div class="profile-card">
+      
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-messages">
+            {% for category, msg in messages %}
+              <div class="alert alert-{{ category }}">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>{{ msg }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      {% if teacher %}
+        <!-- Profile Header -->
+        <div class="profile-hero">
+          <div class="profile-avatar teacher-profile-avatar">
+            <i class="fa-solid fa-chalkboard-user"></i>
+          </div>
+          <div class="profile-title-block">
+            <h2>{{ teacher.name }}</h2>
+            <div class="profile-badges">
+              <span class="badge-role badge-teacher-role">Faculty Member</span>
+              <span class="badge-bio"><i class="fa-solid fa-graduation-cap"></i> Academic Staff</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Details Grid -->
+        <div class="profile-details-grid">
+          <div class="detail-tile">
+            <div class="tile-icon icon-emerald"><i class="fa-solid fa-envelope"></i></div>
+            <div class="tile-content">
+              <span class="tile-label">Institutional Email</span>
+              <span class="tile-value">{{ teacher.email }}</span>
+            </div>
+          </div>
+
+          <div class="detail-tile">
+            <div class="tile-icon icon-blue"><i class="fa-solid fa-book-open"></i></div>
+            <div class="tile-content">
+              <span class="tile-label">Primary Teaching Subject</span>
+              <span class="tile-value">{{ teacher.subject or 'Not Specified' }}</span>
+            </div>
+          </div>
+
+          <div class="detail-tile">
+            <div class="tile-icon icon-cyan"><i class="fa-solid fa-building-columns"></i></div>
+            <div class="tile-content">
+              <span class="tile-label">Department</span>
+              <span class="tile-value">{{ teacher.department or 'Computer Science & Engineering' }}</span>
+            </div>
+          </div>
+
+          <div class="detail-tile">
+            <div class="tile-icon icon-purple"><i class="fa-solid fa-award"></i></div>
+            <div class="tile-content">
+              <span class="tile-label">Academic Qualification</span>
+              <span class="tile-value">{{ teacher.qualification or 'Faculty Instructor' }}</span>
+            </div>
+          </div>
+
+          {% if teacher.phone %}
+          <div class="detail-tile">
+            <div class="tile-icon"><i class="fa-solid fa-phone"></i></div>
+            <div class="tile-content">
+              <span class="tile-label">Contact Phone</span>
+              <span class="tile-value">{{ teacher.phone }}</span>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Action Links -->
+        <div class="profile-actions">
+          <a href="{{ url_for('view_students') }}" class="btn btn-primary">
+            <i class="fa-solid fa-users"></i> View Students Directory
+          </a>
+          <a href="{{ url_for('manage_attendance') }}" class="btn btn-secondary">
+            <i class="fa-solid fa-clipboard-list"></i> Manage Attendance Logs
+          </a>
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <div class="empty-icon"><i class="fa-solid fa-user-xmark"></i></div>
+          <h3>Faculty Details Not Found</h3>
+          <p>Please log in with your faculty credentials to view this profile.</p>
+          <a href="{{ url_for('teacher_login') }}" class="btn btn-primary">Faculty Login</a>
+        </div>
+      {% endif %}
+
+      <div class="card-footer-nav">
+        <a href="{{ url_for('teacher_dashboard') }}" class="back-link">
+          <i class="fa-solid fa-arrow-left"></i> Return to Faculty Dashboard
+        </a>
+      </div>
+
+    </div>
+  </main>
+</body>
+</html>

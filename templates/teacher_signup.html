@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faculty Registration - VeriFace AI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+  <div class="auth-page">
+    <div class="auth-card">
+      
+      <!-- Left Showcase Panel -->
+      <div class="auth-showcase teacher-showcase">
+        <a href="{{ url_for('home') }}" class="auth-brand">
+          <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <span class="brand-title">VeriFace<span class="text-blue">AI</span></span>
+        </a>
+
+        <div class="showcase-content">
+          <div class="showcase-badge teacher-badge">
+            <i class="fa-solid fa-address-card"></i> Faculty Registration
+          </div>
+          <h2>Join the Faculty Network</h2>
+          <p>Register as a professor or instructor to automate your classroom attendance, manage class rosters, and access downloadable attendance analytics.</p>
+
+          <div class="showcase-features">
+            <div class="feature-item">
+              <i class="fa-solid fa-graduation-cap"></i>
+              <span>Multi-course and section control</span>
+            </div>
+            <div class="feature-item">
+              <i class="fa-solid fa-chart-line"></i>
+              <span>Real-time presence auditing</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="showcase-footer">
+          <a href="{{ url_for('home') }}" class="back-link">
+            <i class="fa-solid fa-arrow-left"></i> Back to Homepage
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Form Panel -->
+      <div class="auth-form-panel">
+        <div class="form-header">
+          <h3>Register Faculty Account</h3>
+          <p>Create your teaching staff credentials.</p>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-messages">
+              {% for category, msg in messages %}
+                <div class="alert alert-{{ category }}">
+                  <i class="fa-solid fa-circle-info"></i>
+                  <span>{{ msg }}</span>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('teacher_signup') }}" class="auth-form">
+          <div class="form-group">
+            <label for="name"><i class="fa-solid fa-user"></i> Full Name</label>
+            <div class="input-wrapper">
+              <input type="text" id="name" name="name" placeholder="Dr. Sarah Connor" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email"><i class="fa-solid fa-envelope"></i> Institutional Email Address</label>
+            <div class="input-wrapper">
+              <input type="email" id="email" name="email" placeholder="sarah.connor@university.edu" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="subject"><i class="fa-solid fa-book-open"></i> Teaching Subject / Department</label>
+            <div class="input-wrapper">
+              <input type="text" id="subject" name="subject" placeholder="e.g. Computer Science / AI" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password"><i class="fa-solid fa-lock"></i> Password</label>
+            <div class="input-wrapper">
+              <input type="password" id="password" name="password" placeholder="Create a secure password" required>
+              <button type="button" class="btn-toggle-password" onclick="togglePasswordVisibility('password', this)" title="Toggle visibility">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            <i class="fa-solid fa-user-check"></i> Register Faculty Account
+          </button>
+        </form>
+
+        <div class="form-footer">
+          <p>Already registered? <a href="{{ url_for('teacher_login') }}">Sign in here</a></p>
+          <div class="portal-switch">
+            <span>Student registration?</span>
+            <a href="{{ url_for('signup') }}">Student Signup &rarr;</a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const icon = btn.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
+  </script>
+</body>
+</html>
